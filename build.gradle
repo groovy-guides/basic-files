@@ -3,13 +3,16 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 
 repositories {
-    mavenCentral()
+    jcenter()
 }
 
 dependencies {
-    compile 'org.codehaus.groovy:groovy-all:2.4.3'
-    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+    compile group: 'org.codehaus.groovy', name:'groovy-all', version: project.groovyVersion
+    testCompile group: 'org.spockframework', name: 'spock-core', version:"$project.spockVersion-$project.groovyVersion"
 }
+
+compileGroovy.sourceCompatibility = project.groovyVersion
+compileGroovy.targetCompatibility = project.groovyVersion
 
 task runScript (dependsOn: 'classes', type: JavaExec) {
     description 'Runs the src/main/groovy/main.groovy file'
@@ -18,5 +21,5 @@ task runScript (dependsOn: 'classes', type: JavaExec) {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.4'
+    gradleVersion = project.gradleVersion
 }
