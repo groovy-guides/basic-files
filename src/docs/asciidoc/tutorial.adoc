@@ -86,6 +86,14 @@ Paths in some operating systems, such as Linux and OS X, are case-sensitive. Thi
 As a programmer this can be rather frustrating as you can write Groovy code that works across a number of operating systems but you need to make sure you're correctly handling paths.
 
 == Paths
+
+[source,groovy]
+----
+include::{sourcedir}/directory-list.groovy[]
+----
+
+See also `eachFileMatch` and `eachFileRecurse` methods.
+
 === Absolute and relative paths
 
 

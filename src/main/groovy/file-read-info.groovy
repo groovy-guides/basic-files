@@ -13,6 +13,7 @@ Tika tika = new Tika()
 
 println """
 File name: ${f.fileName}
+Absolute path: ${f.toAbsolutePath()}
 
 The file exists: ${Files.exists(f)}
 
