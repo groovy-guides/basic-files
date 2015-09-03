@@ -1,2 +1,3 @@
-# basic-files
-An introductory tutorial demonstrating how to read and write a file 
+= Reading and writing files tutorial
+
+Refer to `src\docs\asciidoc\tutorial.adoc`
