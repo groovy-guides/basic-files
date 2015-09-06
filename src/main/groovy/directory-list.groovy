@@ -4,7 +4,7 @@ import java.nio.file.Paths
 import java.nio.file.attribute.BasicFileAttributes
 
 Path dir = Paths.get('resources')
-BasicFileAttributes attrs = Files.readAttributes(dir, BasicFileAttributes.class)
+BasicFileAttributes attrs = Files.readAttributes(dir, BasicFileAttributes)
 
 println """
 Directory name: ${dir.fileName}

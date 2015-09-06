@@ -6,7 +6,7 @@ Path f = Paths.get('tmp/tmp-numbers.txt')
 f.withWriter { writer ->
     for (i in 1..12) {
         for (j in 1..12) {
-            writer << "${i*j}\t"
+            writer << "${ i * j }\t"
         }
         writer << '\n'
     }

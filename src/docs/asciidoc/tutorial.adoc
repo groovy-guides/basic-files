@@ -8,11 +8,10 @@ v0.1, 2015-08-25
 :jbake-status: draft
 :src: https://github.com/groovy-tutorial/basic-files
 :sourcedir: ../../main/groovy
-:toc:
 :level: basic
 :keywords: documentation, manual
-:description: This tutorial will explore reading a writing a variety of filetypes (text, json, xml) with Groovy. \
-A set of basic scripts will be used to demonstrate the various Groovy methods.
+:description: This tutorial will explore reading a writing a variety of filetypes (text, json, xml) with Groovy. A set of basic scripts will be used to demonstrate the various Groovy methods.
+:toc:
 
 Groovy extends the Java file libraries to make reading and writing files really easy.
 

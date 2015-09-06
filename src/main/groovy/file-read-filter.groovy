@@ -3,6 +3,8 @@ import java.nio.file.Paths
 
 Path f = Paths.get('resources/logic.txt')
 
-def output = f.filterLine {it != ''}
+def output = f.filterLine {
+    it != ''
+}
 
 println output

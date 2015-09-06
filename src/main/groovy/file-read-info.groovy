@@ -7,7 +7,7 @@ import java.nio.file.Files
 import java.nio.file.attribute.BasicFileAttributes
 
 Path f = Paths.get('resources/hello.html')
-BasicFileAttributes attrs = Files.readAttributes(f, BasicFileAttributes.class)
+BasicFileAttributes attrs = Files.readAttributes(f, BasicFileAttributes)
 
 Tika tika = new Tika()
 

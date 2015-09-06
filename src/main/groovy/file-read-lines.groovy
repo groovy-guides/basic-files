@@ -4,7 +4,7 @@ import java.nio.file.Paths
 Path f = Paths.get('resources/logic.txt')
 
 //This will print each line of the file prefixed with a line number:
-f.eachLine {text, lineNumber ->
+f.eachLine { text, lineNumber ->
     println "$lineNumber\t$text"
 }
 

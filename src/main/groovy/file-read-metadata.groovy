@@ -15,10 +15,10 @@ Metadata metadata = new Metadata()
 
 Reader r = tika.parse(f.newInputStream(), metadata)
 
-print """
+print '''
 File metadata:
 --------------------
-"""
+'''
 
 for (name in metadata.names()) {
     println "$name: ${metadata.get(name)}"
