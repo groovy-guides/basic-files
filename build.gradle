@@ -8,7 +8,6 @@ buildscript {
     dependencies {
         //See: https://github.com/asciidoctor/asciidoctor-gradle-plugin
         classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.2'
-
     }
 }
 
@@ -16,14 +15,26 @@ repositories {
     jcenter()
 }
 
+configurations {
+    ivy
+}
+
 dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.4.4'
+    ivy "org.apache.ivy:ivy:2.4.0"
+}
+
+tasks.withType(GroovyCompile) {
+    groovyClasspath += configurations.ivy
 }
 
 apply plugin: 'codenarc'
-project.codenarc.toolVersion = 0.24
+codenarc.toolVersion = 0.24
 codenarcMain {
-    ignoreFailures true
+    ignoreFailures false
+    maxPriority1Violations 0
+    maxPriority2Violations 5
+    maxPriority3Violations 10
     configFile file('config/codenarc/ruleset.groovy')
 }
 
@@ -36,4 +47,9 @@ asciidoctor {
         }
         into 'src'
     }
+}
+
+task publish(type: GradleBuild, dependsOn: [asciidoctor, check]) {
+    buildFile = 'publish.gradle'
+    tasks = ['publishGhPages']
 }
