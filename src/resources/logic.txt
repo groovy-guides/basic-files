@@ -1,0 +1,46 @@
+SYMBOLIC LOGIC
+By Lewis Carroll
+(https://www.gutenberg.org/ebooks/28696)
+
+A Syllogism worked out.
+
+That story of yours, about your once meeting the sea-serpent, always
+sets me off yawning;
+
+I never yawn, unless when I'm listening to something totally devoid of
+interest.
+
+The Premisses, separately.
+
+    ·---------------·           ·---------------·
+    |( )    |    ( )|           |       |       |
+    |   ·---|---·   |           |   ·---|---·   |
+    |   |  (#)  |   |           |   |   |( )|   |
+    |---|---|---|---|           |---|---|---|---|
+    |   |   |   |   |           |   |   |( )|   |
+    |   ·---|---·   |           |   ·---|---·   |
+    |       |       |           |       |       |
+    ·---------------·           ·---------------·
+
+The Premisses, combined.
+
+    ·---------------·
+    |( )    |    ( )|
+    |   ·---|---·   |
+    |   |(#)|( )|   |
+    |---|---|---|---|
+    |   |   |( )|   |
+    |   ·---|---·   |
+    |       |       |
+    ·---------------·
+
+The Conclusion.
+
+    ·-------·
+    |(#)|( )|
+    |---|---|
+    |   |   |
+    ·-------·
+
+That story of yours, about your once meeting the sea-serpent, is totally
+devoid of interest.
