@@ -1,41 +1,57 @@
-= Reading and writing files
+= Introduction to directories and files
 Duncan Dickinson <duncan@groovy-tutorial.org>
 v0.1, 2015-08-25
 :groovy-version: 2.4.4
 :licence: Apache License, Version 2.0
 :licence-url: http://www.apache.org/licenses/LICENSE-2.0
-:jbake-type: page
-:jbake-status: draft
 :src: https://github.com/groovy-tutorial/basic-files
+:vcs-tag:
 :sourcedir: ../../main/groovy
 :level: basic
 :keywords: documentation, manual
-:description: This tutorial will explore reading a writing a variety of filetypes (text, json, xml) with Groovy. A set of basic scripts will be used to demonstrate the various Groovy methods.
+:description: This tutorial will provide an introduction to working with directories and folders. A set of basic scripts will be used to demonstrate the various Groovy methods available.
+:icons: font
+:source-highlighter: coderay
+:source-language: groovy
 :toc:
 
 Groovy extends the Java file libraries to make reading and writing files really easy.
 
-.Using this tutorial
-****
-For details on running the tutorial on your own system, please refer to the http://www.groovy-tutorial.org/GettingStarted.html[Getting started guide]
+== Introduction
+Reading and writing files and working in the filesystem are cornerstones of most development. Groovy gives us access to the Java libraries
+for dealing with files and directories and provide some handy methods that take away some heavy lifting. What's more, you can use
+ Groovy scripts to provide quick command line actions that help you manage and manipulate files.
 
-* Source code: {src}[{src}]
-* Licence (text and code): {licence-url}[{licence}]
-****
+In this tutorial we'll look at directory and file handling by exploring a number of small scripts.
 
 [WARNING]
 ====
-This tutorial is aimed at introducing the topic of reading/writing files and it uses simple code as demonstrations.
+This tutorial is aimed at introducing the topic of reading/writing files and it uses simple code for demonstration purposes.
 
 It's likely that such code will not fare well when facing large files or environments requiring high-performance IO.
 ====
 
+=== Key libraries
+The following libraries will be utilised in this tutorial:
+
+* https://docs.oracle.com/javase/8/docs/api/java/nio/file/package-summary.html[Java's `java.nio.file`] provides the primary directory/file handling
+** http://docs.groovy-lang.org/latest/html/groovy-jdk/java/nio/file/Path.html[Groovy's extension to `java.nio.file.Path`] makes life easier
+* http://tika.apache.org/[Apache Tika] is used to extract metadata and plain text from files
+
+=== Using this tutorial
+For details on running the tutorial on your own system, please refer to the http://www.groovy-tutorial.org/GettingStarted.html[Getting started guide]
+
+* Source code: {src}[{src}]
+* Licence (text and code): {licence-url}[{licence}]
+
+The code in this tutorial was prepared using Groovy version {groovy-version}
+
 == Background
 Java originally shipped a library (`java.io`) for handling input and output from elements such as files, network resources and devices. A new library, called NIO (`java.nio`), was released in Java 1.4 and extended in Java 7. This later extension is usually referred to as NIO.2 but you'll find these classes in the `java.nio` packages.
 
-As you'd expect, Groovy lets you use `java.io` and `java.nio` packages. Groovy has a number of enhancements to the `java.io` package and, as of Groovy 2.3, there has been extended (i.e. Groovy-friendly) support for `java.nio.file.Path`. I'll focus on using the NIO packages in the tutorials on file I/O.
+As you'd expect, Groovy's home in the JVM lets you use `java.io` and `java.nio` packages. Groovy has a number of enhancements to the `java.io` package and, as of Groovy 2.3, there has been extended (i.e. Groovy-friendly) support for `java.nio.file.Path`. I'll focus on using the NIO packages in the tutorials on file I/O.
 
-### Key concepts
+=== Key concepts
 
 There are a few key concepts that you should get your head around if you're going to be handling file I/O. First of all, let's picture a filesystem's hierarchical layout:
 
@@ -58,53 +74,54 @@ Whilst this won't necessarily match the way your files are laid out in directori
 * There's a `users` directory.
 ** Directory is analogous to "folder"
 * Each user (`bill` and `jane`) has their own directory
-* Bill has one file (`letter.txt`) stored in his `documents` directory
-* Jane has one file (`song.mp3`) stored in her `music` directory
+** Bill has one file (`letter.txt`) stored in his `documents` directory
+** Jane has one file (`song.mp3`) stored in her `music` directory
 * Files usually (though not always) have an extension (e.g. `mp3` or `txt`). This gives us a clue to what type of content to expect in the file
-	* But don't trust this as the user can change the extension to anything
+** But don't trust this as the user can change the extension to anything
 
-#### Paths
+==== Paths
 A "path" defines the location of a resource (such as a file or directory) within a filesystem.
 
-Different operating systems use different notations to define a path. For example, in Linux-based and Apple's OS X operating systems you would refer to Jane's song file using `/users/jane/music/song.mp3`. In Microsoft Windows you would use `C:\users\music\song.mp3`.
-
-To separate each segment of the hierarchy (i.e. each folder and file) a separator is used:
+Different operating systems use different notations to define a path. For example, in Linux-based and Apple's OS X operating systems you would refer to Jane's song file using `/users/jane/music/song.mp3`. In Microsoft Windows you would use `C:\users\music\song.mp3`. To separate each segment of the hierarchy (i.e. each folder and file) a separator is used:
 
  - Linux and OS X use the forward slash character (`/`)
- - Windows uses backslashes ('\\')
+ - Windows uses backslashes (`\`)
 
-The use of backslashes in Windows' paths can make strings annoying. Looking at `println 'C:\users\jane\music\song.mp3'` you'll see the problem pretty quickly - the backslash is an escape character in Groovy strings so that `println` won't work. You can escape the backslash using `\\` but that starts to look very messy: `println 'C:\\users\\jane\\music\\song.mp3'`. Luckily, we can use the forward slash instead and Groovy will `println 'C:/users/jane/music/song.mp3'`
+[TIP]
+====
+The use of backslashes in Windows' paths can make strings annoying. Trying `println 'C:\users\jane\music\song.mp3'` in the groovyConsole you'll see the problem pretty quickly - the backslash is an escape character in Groovy strings so that `println` won't work. You can escape the backslash using `\\` but that starts to look very messy: `println 'C:\\users\\jane\\music\\song.mp3'`. Luckily, we can use the forward slash instead and Groovy will not only `println 'C:/users/jane/music/song.mp3'` but understand that your describing a path.
+====
 
-.Separators
-****
-If you'd like to check which separator is used by the operating system you're using, try `println File.separator` in the Groovy Console
-****
+TIP: If you'd like to check which separator is used by the operating system you're using, try `println File.separator` in the Groovy Console
 
-Paths in some operating systems, such as Linux and OS X, are case-sensitive. This means that you must refer to a path using the correct upper-case and lower-case characters. This means that `/users/Jane/music/song.MP3` doesn't refer to the same path as `/users/jane/music/song.mp3`. However, Windows' paths are case-insensitive so the two versions of the path for Jane's song file both point to the same file.
-
-As a programmer this can be rather frustrating as you can write Groovy code that works across a number of operating systems but you need to make sure you're correctly handling paths.
+Paths in some operating systems, such as Linux and OS X, are case-sensitive. This means that you must refer to a path using the correct upper-case and lower-case characters. This means that `/users/Jane/music/song.MP3` doesn't refer to the same path as `/users/jane/music/song.mp3`. However, Windows' paths are case-insensitive so the two versions of the path for Jane's song file both point to the same file. Between this and the different root nodes (`/` and `c:\`) it can be rather frustrating - you can write Groovy code that works across a number of operating systems but you need to make sure you're correctly handling paths.
 
 == Paths
 
-[source,groovy]
+=== Absolute and relative paths
+
+== Directories
+
+[source]
+.directory-list.groovy
 ----
 include::{sourcedir}/directory-list.groovy[]
 ----
+<1> Blah
+<2> Blah 2
+<3>
 
-See also `eachFileMatch` and `eachFileRecurse` methods.
-
-=== Absolute and relative paths
-
+TIP: See also `Path.eachFileMatch` and `Path.eachFileRecurse` methods when you want to get specific files.
 
 == Files
 === File information
 
-[source,groovy]
+[source]
 ----
 include::{sourcedir}/file-read-info.groovy[]
 ----
 
-[source,groovy]
+[source]
 ----
 include::{sourcedir}/file-read-metadata.groovy[]
 ----
@@ -112,7 +129,7 @@ include::{sourcedir}/file-read-metadata.groovy[]
 === Reading a file
 Groovy
 
-[source,groovy]
+[source]
 ----
 include::{sourcedir}/file-read-path.groovy[]
 ----
@@ -122,14 +139,14 @@ include::{sourcedir}/file-read-path.groovy[]
 ====
 The `java.io.File` class is in heavy use across the Java-verse but http://www.oracle.com/technetwork/articles/javase/nio-139333.html[it's the old way of doing things]. The example below demonstrates `File` in action:
 
-[source,groovy]
+[source]
 ----
 include::{sourcedir}/file-read-file.groovy[]
 ----
 
 Luckily, the `File` class has a `toPath()` method that you can use to switch to the `nio` path:
 
-[source,groovy]
+[source]
 ----
 include::{sourcedir}/file-path-bridge.groovy[]
 ----
@@ -137,45 +154,45 @@ include::{sourcedir}/file-path-bridge.groovy[]
 Walk the new `Path`!
 ====
 
-[source,groovy]
+[source]
 ----
 include::{sourcedir}/file-read-reader.groovy[]
 ----
 
 ==== Read each line
-[source,groovy]
+[source]
 ----
 include::{sourcedir}/file-read-lines.groovy[]
 ----
 
-[source,groovy]
+[source]
 ----
 include::{sourcedir}/file-read-filter.groovy[]
 ----
 
-[source,groovy]
+[source]
 ----
 include::{sourcedir}/file-read-split.groovy[]
 ----
 
 === Writing a file
 
-[source,groovy]
+[source]
 ----
 include::{sourcedir}/file-write-basic.groovy[]
 ----
 
-[source,groovy]
+[source]
 ----
 include::{sourcedir}/file-write-temp.groovy[]
 ----
 
-[source,groovy]
+[source]
 ----
 include::{sourcedir}/file-write-append.groovy[]
 ----
 
-[source,groovy]
+[source]
 ----
 include::{sourcedir}/file-write-writer.groovy[]
 ----

@@ -3,8 +3,8 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.nio.file.attribute.BasicFileAttributes
 
-Path dir = Paths.get('resources')
-BasicFileAttributes attrs = Files.readAttributes(dir, BasicFileAttributes)
+Path dir = Paths.get('resources') //<1>
+BasicFileAttributes attrs = Files.readAttributes(dir, BasicFileAttributes) //<2>
 
 println """
 Directory name: ${dir.fileName}
@@ -22,6 +22,7 @@ Last accessed: ${attrs.lastAccessTime()}
 
 Children:"""
 
+//<3>
 dir.eachFile {
     println "  - ${it.fileName}"
 }
