@@ -1,11 +1,10 @@
-= Introduction to directories and files
+= Introduction to directories and files in Groovy
 Duncan Dickinson <duncan@groovy-tutorial.org>
-v0.1, 2015-08-25
+v0.1-DRAFT, 2015-09-09
 :groovy-version: 2.4.4
 :licence: Apache License, Version 2.0
 :licence-url: http://www.apache.org/licenses/LICENSE-2.0
 :src: https://github.com/groovy-tutorial/basic-files
-:vcs-tag:
 :sourcedir: ../../main/groovy
 :level: basic
 :keywords: documentation, manual
@@ -41,10 +40,12 @@ The following libraries will be utilised in this tutorial:
 === Using this tutorial
 For details on running the tutorial on your own system, please refer to the http://www.groovy-tutorial.org/GettingStarted.html[Getting started guide]
 
-* Source code: {src}[{src}]
-* Licence (text and code): {licence-url}[{licence}]
+Access the source code:
 
-The code in this tutorial was prepared using Groovy version {groovy-version}
+* {src}/tree/gh-pages[Source code]
+* {src}/archive/gh-pages.zip[As a zip file]
+
+The code in this tutorial was prepared using Groovy version {groovy-version} and is licensed under {licence-url}[{licence}]
 
 == Background
 Java originally shipped a library (`java.io`) for handling input and output from elements such as files, network resources and devices. A new library, called NIO (`java.nio`), was released in Java 1.4 and extended in Java 7. This later extension is usually referred to as NIO.2 but you'll find these classes in the `java.nio` packages.
