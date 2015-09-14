@@ -40,16 +40,22 @@ codenarcMain {
 
 apply plugin: 'org.asciidoctor.convert'
 asciidoctor {
+    logDocuments = true
     resources {
-        from('src/main/groovy') {
-            include '*.groovy'
-            include 'resources/*'
+        from('src/main/') {
+            include 'groovy/**'
         }
-        into 'src'
+
+        from('src/docs/html/') {
+            include '*.html'
+        }
+
+        into '.'
     }
 }
 
-task publish(type: GradleBuild, dependsOn: [asciidoctor, check]) {
+task publish(type: GradleBuild, dependsOn: [ asciidoctor, check ]) {
+    description 'Publishes to gh-pages'
     buildFile = 'publish.gradle'
-    tasks = ['publishGhPages']
+    tasks = [ 'publishGhPages' ]
 }
