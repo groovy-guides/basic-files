@@ -9,7 +9,6 @@ buildscript {
 }
 
 apply plugin: 'org.ajoberstar.github-pages'
-
 githubPages {
     repoUri = 'git@github.com:groovy-tutorial/basic-files.git'
     pages {
