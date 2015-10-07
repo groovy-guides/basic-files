@@ -1,61 +1,28 @@
-apply plugin: 'groovy'
-
-buildscript {
-    repositories {
-        jcenter()
-    }
-
-    dependencies {
-        //See: https://github.com/asciidoctor/asciidoctor-gradle-plugin
-        classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.2'
-    }
+plugins {
+    id 'groovy'
+    id 'idea'
 }
 
 repositories {
     jcenter()
 }
 
-configurations {
-    ivy
-}
-
 dependencies {
-    compile 'org.codehaus.groovy:groovy-all:2.4.4'
-    ivy "org.apache.ivy:ivy:2.4.0"
+    compile 'org.codehaus.groovy:groovy-all:2.4.5'
+    compile 'org.apache.tika:tika-core:1.10', 'org.apache.tika:tika-parsers:1.10'
 }
 
-tasks.withType(GroovyCompile) {
-    groovyClasspath += configurations.ivy
+task run(dependsOn: 'classes', type: JavaExec) {
+    description 'Runs a groovy script in src/main/groovy'
+    group 'Tutorial'
+
+    classpath = sourceSets.main.runtimeClasspath
+    workingDir = 'src/main/groovy'
+
+    def script = System.getProperty("script")?: 'directory-list'
+    println "\nRunning script: $script\n"
+
+    main = script
 }
 
-apply plugin: 'codenarc'
-codenarc.toolVersion = 0.24
-codenarcMain {
-    ignoreFailures false
-    maxPriority1Violations 0
-    maxPriority2Violations 5
-    maxPriority3Violations 10
-    configFile file('config/codenarc/ruleset.groovy')
-}
-
-apply plugin: 'org.asciidoctor.convert'
-asciidoctor {
-    logDocuments = true
-    resources {
-        from('src/main/') {
-            include 'groovy/**'
-        }
-
-        from('src/docs/html/') {
-            include '*.html'
-        }
-
-        into '.'
-    }
-}
-
-task publish(type: GradleBuild, dependsOn: [ asciidoctor, check ]) {
-    description 'Publishes to gh-pages'
-    buildFile = 'publish.gradle'
-    tasks = [ 'publishGhPages' ]
-}
+defaultTasks 'run'
