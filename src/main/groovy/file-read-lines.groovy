@@ -8,6 +8,7 @@ f.eachLine { text, lineNumber ->
     println "$lineNumber\t$text"
 }
 
+println '\nNow, in reverse\n'
 //This will print the lines in the reverse order:
 def lines = f.readLines()
 lines.reverse().each {
