@@ -527,11 +527,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_key_concepts">Key concepts</a></li>
 </ul>
 </li>
-<li><a href="#_paths_2">Paths</a>
-<ul class="sectlevel2">
-<li><a href="#_absolute_and_relative_paths">Absolute and relative paths</a></li>
-</ul>
-</li>
+<li><a href="#_the_pratcical_stuff">The pratcical stuff</a></li>
 <li><a href="#_directories">Directories</a></li>
 <li><a href="#_files">Files</a>
 <ul class="sectlevel2">
@@ -555,9 +551,7 @@ table.CodeRay td.code>pre{padding:0}
 <h2 id="_introduction">Introduction</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Reading and writing files and working in the filesystem are cornerstones of most development. Groovy gives us access to the Java libraries
-for dealing with files and directories and provide some handy methods that take away some heavy lifting. What&#8217;s more, you can use
- Groovy scripts to provide quick command line actions that help you manage and manipulate files.</p>
+<p>Reading and writing files and working in the filesystem are cornerstones of most development. Groovy gives us access to the Java libraries for dealing with files and directories and provide some handy methods that take away some heavy lifting. What&#8217;s more, you can use Groovy scripts to provide quick command line actions that help you manage and manipulate files.</p>
 </div>
 <div class="paragraph">
 <p>In this tutorial we&#8217;ll look at directory and file handling by exploring a number of small scripts.</p>
@@ -643,13 +637,13 @@ for dealing with files and directories and provide some handy methods that take 
 <div class="literalblock">
 <div class="content">
 <pre>  C:\ or /
-      users/
-          bill/
-              documents/
-          	    letter.txt
-          jane/
-              music/
-          	    song.mp3</pre>
+  └── users
+      ├── bill
+      │   └── documents
+      │       └── letter.txt
+      └── jane
+          └── music
+              └── song.mp3</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -733,18 +727,9 @@ for dealing with files and directories and provide some handy methods that take 
 <div class="paragraph">
 <p>The use of backslashes in Windows' paths can make strings annoying. Trying <code>println 'C:\users\jane\music\song.mp3'</code> in the groovyConsole you&#8217;ll see the problem pretty quickly - the backslash is an escape character in Groovy strings so that <code>println</code> won&#8217;t work. You can escape the backslash using <code>\\</code> but that starts to look very messy: <code>println 'C:\\users\\jane\\music\\song.mp3'</code>. Luckily, we can use the forward slash instead and Groovy will not only <code>println 'C:/users/jane/music/song.mp3'</code> but understand that your describing a path.</p>
 </div>
-</td>
-</tr>
-</table>
+<div class="paragraph">
+<p>If you&#8217;d like to check which separator is used by the operating system you&#8217;re using, try <code>println File.separator</code> in the Groovy Console</p>
 </div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-If you&#8217;d like to check which separator is used by the operating system you&#8217;re using, try <code>println File.separator</code> in the Groovy Console
 </td>
 </tr>
 </table>
@@ -752,16 +737,21 @@ If you&#8217;d like to check which separator is used by the operating system you
 <div class="paragraph">
 <p>Paths in some operating systems, such as Linux and OS X, are case-sensitive. This means that you must refer to a path using the correct upper-case and lower-case characters. This means that <code>/users/Jane/music/song.MP3</code> doesn&#8217;t refer to the same path as <code>/users/jane/music/song.mp3</code>. However, Windows' paths are case-insensitive so the two versions of the path for Jane&#8217;s song file both point to the same file. Between this and the different root nodes (<code>/</code> and <code>c:\</code>) it can be rather frustrating - you can write Groovy code that works across a number of operating systems but you need to make sure you&#8217;re correctly handling paths.</p>
 </div>
+<div class="paragraph">
+<p>An <em>absolute path</em> is the canonical location of a file or directory and will contain the root directory (e.g. <code>C:\</code> or <code>/</code>). For example: <code>/users/bill/documents/</code>.</p>
+</div>
+<div class="paragraph">
+<p>A <em>relative path</em> represents the location of a file/directory from (relative to) another file/directory.</p>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_paths_2">Paths</h2>
+<h2 id="_the_pratcical_stuff">The pratcical stuff</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="_absolute_and_relative_paths">Absolute and relative paths</h3>
-
+<div class="paragraph">
+<p>Right, that&#8217;s enough thoery - let&#8217;s get to work!</p>
 </div>
 </div>
 </div>
@@ -836,7 +826,9 @@ See also <code>Path.eachFileMatch</code> and <code>Path.eachFileRecurse</code> m
 <div class="listingblock">
 <div class="title"><a href="groovy/file-read-info.groovy">file-read-info.groovy</a></div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="annotation">@Grab</span>(<span class="string"><span class="delimiter">'</span><span class="content">org.apache.tika:tika-core:1.10</span><span class="delimiter">'</span></span>)
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">//If you want to run this file as a script you'll need to uncomment the next line:</span>
+<span class="comment">//@Grab('org.apache.tika:tika-core:1.10')</span>
+
 <span class="keyword">import</span> <span class="include">org.apache.tika.Tika</span>
 
 <span class="keyword">import</span> <span class="include">java.nio.file.Path</span>
@@ -876,9 +868,11 @@ Last accessed: </span><span class="inline"><span class="inline-delimiter">${</sp
 <div class="listingblock">
 <div class="title"><a href="groovy/file-read-metadata.groovy">file-read-metadata.groovy</a></div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="annotation">@Grapes</span>([
-        <span class="annotation">@Grab</span>(<span class="string"><span class="delimiter">'</span><span class="content">org.apache.tika:tika-core:1.10</span><span class="delimiter">'</span></span>),
-        <span class="annotation">@Grab</span>(<span class="string"><span class="delimiter">'</span><span class="content">org.apache.tika:tika-parsers:1.10</span><span class="delimiter">'</span></span>)])
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">/*
+ * @Grab('org.apache.tika:tika-core:1.10')
+ * @Grab('org.apache.tika:tika-parsers:1.10')
+ */</span>
+
 <span class="keyword">import</span> <span class="include">org.apache.tika.Tika</span>
 <span class="keyword">import</span> <span class="include">org.apache.tika.metadata.Metadata</span>
 
@@ -993,6 +987,7 @@ f.eachLine { text, lineNumber -&gt;
     println <span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">$</span>lineNumber</span><span class="char">\t</span><span class="inline"><span class="inline-delimiter">$</span>text</span><span class="delimiter">&quot;</span></span>
 }
 
+println <span class="string"><span class="delimiter">'</span><span class="content">\nNow, in reverse\n</span><span class="delimiter">'</span></span>
 <span class="comment">//This will print the lines in the reverse order:</span>
 <span class="keyword">def</span> lines = f.readLines()
 lines.reverse().each {
@@ -1116,7 +1111,7 @@ print f.text</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version 0.1-DRAFT<br>
-Last updated 2015-09-14 12:06:50 +10:00
+Last updated 2015-10-06 15:33:13 +10:00
 </div>
 </div>
 </body>

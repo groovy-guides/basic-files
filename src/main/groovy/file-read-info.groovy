@@ -1,4 +1,6 @@
-@Grab('org.apache.tika:tika-core:1.10')
+//If you want to run this file as a script you'll need to uncomment the next line:
+//@Grab('org.apache.tika:tika-core:1.10')
+
 import org.apache.tika.Tika
 
 import java.nio.file.Path

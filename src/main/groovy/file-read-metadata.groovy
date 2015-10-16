@@ -1,6 +1,8 @@
-@Grapes([
-        @Grab('org.apache.tika:tika-core:1.10'),
-        @Grab('org.apache.tika:tika-parsers:1.10')])
+/*
+ * @Grab('org.apache.tika:tika-core:1.10')
+ * @Grab('org.apache.tika:tika-parsers:1.10')
+ */
+
 import org.apache.tika.Tika
 import org.apache.tika.metadata.Metadata
 

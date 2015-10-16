@@ -1,0 +1,28 @@
+plugins {
+    id 'groovy'
+    id 'idea'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.4.5'
+    compile 'org.apache.tika:tika-core:1.10', 'org.apache.tika:tika-parsers:1.10'
+}
+
+task run(dependsOn: 'classes', type: JavaExec) {
+    description 'Runs a groovy script in src/main/groovy'
+    group 'Tutorial'
+
+    classpath = sourceSets.main.runtimeClasspath
+    workingDir = 'src/main/groovy'
+
+    def script = System.getProperty("script")?: 'directory-list'
+    println "\nRunning script: $script\n"
+
+    main = script
+}
+
+defaultTasks 'run'
