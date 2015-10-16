@@ -8,6 +8,7 @@ defaultTasks 'syncPublishFiles'
 asciidoctor {
     logDocuments = true
     separateOutputDirs = false
+
 }
 
 task syncPublishFiles(type: Sync, dependsOn: [asciidoctor]) {

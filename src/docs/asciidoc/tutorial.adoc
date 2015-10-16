@@ -187,28 +187,4 @@ include::{sourcedir}/file-read-filter.groovy[]
 include::{sourcedir}/file-read-split.groovy[]
 ----
 
-=== Writing a file
-
-[source]
-.link:groovy/file-write-basic.groovy[file-write-basic.groovy]
-----
-include::{sourcedir}/file-write-basic.groovy[]
-----
-
-[source]
-.link:groovy/file-write-temp.groovy[file-write-temp.groovy]
-----
-include::{sourcedir}/file-write-temp.groovy[]
-----
-
-[source]
-.link:groovy/file-write-append.groovy[file-write-append.groovy]
-----
-include::{sourcedir}/file-write-append.groovy[]
-----
-
-[source]
-.link:groovy/file-write-writer.groovy[file-write-writer.groovy]
-----
-include::{sourcedir}/file-write-writer.groovy[]
-----
+include::section_writing.adoc[]
