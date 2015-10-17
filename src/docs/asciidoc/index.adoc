@@ -103,13 +103,37 @@ A _relative path_ represents the location of a file/directory from (relative to)
 
 Right, that's enough thoery - let's get to work!
 
-include::section-directories.adoc[]
+== Directories
+
+[source]
+.link:src/main/groovy/directory-list.groovy[directory-list.groovy]
+----
+include::{sourcedir}/directory-list.groovy[]
+----
+<1> Blah
+<2> Blah 2
+<3>
+
+TIP: See also `Path.eachFileMatch` and `Path.eachFileRecurse` methods when you want to get specific files.
+
 
 == Files
 
-include::section-file-read-info.adoc[]
+=== File information
 
-include::section-file-read-metadata.adoc[]
+[source]
+.link:src/main/groovy/file-read-info.groovy[file-read-info.groovy]
+----
+include::{sourcedir}/file-read-info.groovy[]
+----
+
+=== File metadata
+
+[source]
+.link:src/main/groovy/file-read-metadata.groovy[file-read-metadata.groovy]
+----
+include::{sourcedir}/file-read-metadata.groovy[]
+----
 
 === Reading a file
 Groovy
@@ -167,4 +191,28 @@ include::{sourcedir}/file-read-filter.groovy[]
 include::{sourcedir}/file-read-split.groovy[]
 ----
 
-include::section-writing.adoc[]
+=== Writing a file
+
+[source]
+.link:src/main/groovy/file-write-basic.groovy[file-write-basic.groovy]
+----
+include::{sourcedir}/file-write-basic.groovy[]
+----
+
+[source]
+.link:src/main/groovy/file-write-temp.groovy[file-write-temp.groovy]
+----
+include::{sourcedir}/file-write-temp.groovy[]
+----
+
+[source]
+.link:src/main/groovy/file-write-append.groovy[file-write-append.groovy]
+----
+include::{sourcedir}/file-write-append.groovy[]
+----
+
+[source]
+.link:src/main/groovy/file-write-writer.groovy[file-write-writer.groovy]
+----
+include::{sourcedir}/file-write-writer.groovy[]
+----
