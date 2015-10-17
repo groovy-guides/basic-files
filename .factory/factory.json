@@ -1,0 +1,68 @@
+{
+  "ide": {
+    "onAppLoaded": {
+      "actions": [{
+        "id": "openWelcomePage",
+        "properties": {
+          "authenticatedContentUrl": "https://rawgit.com/groovy-tutorial/basic-files/gh-pages/index.html",
+          "authenticatedTitle": "Introduction to directories and files in Groovy",
+          "nonAuthenticatedContentUrl": "https://rawgit.com/groovy-tutorial/basic-files/gh-pages/index.html",
+          "nonAuthenticatedTitle": "Introduction to directories and files in Groovy"
+        }
+      }]
+    },
+    "onProjectOpened": {
+      "actions": []
+    }
+  },
+  "creator": {
+    "created": 1445046925822,
+    "userId": "usercyx9llxdlfid42lz"
+  },
+  "v": "2.1",
+  "project": {
+    "modules": [],
+    "name": "groovy-basic-files",
+    "builders": {
+      "configs": {}
+    },
+
+    "mixinTypes": [],
+    "visibility": "public",
+    "runners": {
+      "configs": {
+        "project:/docker/groovy-runner": {
+          "ram": 1000,
+          "variables": {
+            "configurationType": "blank"
+          },
+          "options": {}
+        }
+      },
+      "default": "project:/docker/groovy-runner"
+    },
+    "type": "blank",
+    "attributes": {},
+    "description": "An introduction to working with directories and folders"
+  },
+  "workspace": {
+    "location": "acceptor",
+    "type": "temp"
+  },
+  "source": {
+    "project": {
+      "location": "https://github.com/groovy-tutorial/basic-files.git",
+      "type": "git",
+      "parameters": {
+        "branch": "gh-pages"
+      }
+    },
+    "runners": {
+      "/docker/groovy-runner": {
+        "location": "https://raw.githubusercontent.com/groovy-tutorial/admin-builders/master/Codenvy/factories/groovy-runner/Dockerfile",
+        "parameters": {}
+      }
+    }
+  },
+  "id": "v6jezb89qakr0um2"
+}
