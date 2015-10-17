@@ -760,7 +760,7 @@ table.CodeRay td.code>pre{padding:0}
 <h2 id="_directories">Directories</h2>
 <div class="sectionbody">
 <div class="listingblock">
-<div class="title"><a href="groovy/directory-list.groovy">directory-list.groovy</a></div>
+<div class="title"><a href="src/main/groovy/directory-list.groovy">directory-list.groovy</a></div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">java.nio.file.Files</span>
 <span class="keyword">import</span> <span class="include">java.nio.file.Path</span>
@@ -825,7 +825,7 @@ See also <code>Path.eachFileMatch</code> and <code>Path.eachFileRecurse</code> m
 <div class="sect2">
 <h3 id="_file_information">File information</h3>
 <div class="listingblock">
-<div class="title"><a href="groovy/file-read-info.groovy">file-read-info.groovy</a></div>
+<div class="title"><a href="src/main/groovy/file-read-info.groovy">file-read-info.groovy</a></div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">//If you want to run this file as a script you'll need to uncomment the next line:</span>
 <span class="comment">//@Grab('org.apache.tika:tika-core:1.10')</span>
@@ -870,7 +870,7 @@ Last accessed: </span><span class="inline"><span class="inline-delimiter">${</sp
 <div class="sect2">
 <h3 id="_file_metadata">File metadata</h3>
 <div class="listingblock">
-<div class="title"><a href="groovy/file-read-metadata.groovy">file-read-metadata.groovy</a></div>
+<div class="title"><a href="src/main/groovy/file-read-metadata.groovy">file-read-metadata.groovy</a></div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">/*
  * @Grab('org.apache.tika:tika-core:1.10')
@@ -914,7 +914,7 @@ Plain text content:
 <p>Groovy</p>
 </div>
 <div class="listingblock">
-<div class="title"><a href="groovy/file-read-path.groovy">file-read-path.groovy</a></div>
+<div class="title"><a href="src/main/groovy/file-read-path.groovy">file-read-path.groovy</a></div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">java.nio.file.Path</span>
 <span class="keyword">import</span> <span class="include">java.nio.file.Paths</span>
@@ -935,7 +935,7 @@ println f.text</code></pre>
 <p>The <code>java.io.File</code> class is in heavy use across the Java-verse but <a href="http://www.oracle.com/technetwork/articles/javase/nio-139333.html">it&#8217;s the old way of doing things</a>. The example below demonstrates <code>File</code> in action:</p>
 </div>
 <div class="listingblock">
-<div class="title"><a href="groovy/file-read-file.groovy">file-read-file.groovy</a></div>
+<div class="title"><a href="src/main/groovy/file-read-file.groovy">file-read-file.groovy</a></div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy"><span class="predefined-type">File</span> f = <span class="keyword">new</span> <span class="predefined-type">File</span>(<span class="string"><span class="delimiter">'</span><span class="content">resources/logic.txt</span><span class="delimiter">'</span></span>)
 println f.text</code></pre>
@@ -945,7 +945,7 @@ println f.text</code></pre>
 <p>Luckily, the <code>File</code> class has a <code>toPath()</code> method that you can use to switch to the <code>nio</code> path:</p>
 </div>
 <div class="listingblock">
-<div class="title"><a href="groovy/file-path-bridge.groovy">file-path-bridge.groovy</a></div>
+<div class="title"><a href="src/main/groovy/file-path-bridge.groovy">file-path-bridge.groovy</a></div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">java.nio.file.Path</span>
 
@@ -962,7 +962,7 @@ println p.text</code></pre>
 </table>
 </div>
 <div class="listingblock">
-<div class="title"><a href="groovy/file-read-reader.groovy">file-read-reader.groovy</a></div>
+<div class="title"><a href="src/main/groovy/file-read-reader.groovy">file-read-reader.groovy</a></div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">java.nio.file.Path</span>
 <span class="keyword">import</span> <span class="include">java.nio.file.Paths</span>
@@ -979,7 +979,7 @@ f.withReader {
 <div class="sect3">
 <h4 id="_read_each_line">Read each line</h4>
 <div class="listingblock">
-<div class="title"><a href="groovy/file-read-lines.groovy">file-read-lines.groovy</a></div>
+<div class="title"><a href="src/main/groovy/file-read-lines.groovy">file-read-lines.groovy</a></div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">java.nio.file.Path</span>
 <span class="keyword">import</span> <span class="include">java.nio.file.Paths</span>
@@ -1000,7 +1000,7 @@ lines.reverse().each {
 </div>
 </div>
 <div class="listingblock">
-<div class="title"><a href="groovy/file-read-filter.groovy">file-read-filter.groovy</a></div>
+<div class="title"><a href="src/main/groovy/file-read-filter.groovy">file-read-filter.groovy</a></div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">java.nio.file.Path</span>
 <span class="keyword">import</span> <span class="include">java.nio.file.Paths</span>
@@ -1015,7 +1015,7 @@ println output</code></pre>
 </div>
 </div>
 <div class="listingblock">
-<div class="title"><a href="groovy/file-read-split.groovy">file-read-split.groovy</a></div>
+<div class="title"><a href="src/main/groovy/file-read-split.groovy">file-read-split.groovy</a></div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">java.nio.file.Path</span>
 <span class="keyword">import</span> <span class="include">java.nio.file.Paths</span>
@@ -1032,7 +1032,7 @@ f.splitEachLine (<span class="regexp"><span class="delimiter">/</span><span clas
 <div class="sect2">
 <h3 id="_writing_a_file">Writing a file</h3>
 <div class="listingblock">
-<div class="title"><a href="groovy/file-write-basic.groovy">file-write-basic.groovy</a></div>
+<div class="title"><a href="src/main/groovy/file-write-basic.groovy">file-write-basic.groovy</a></div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">java.nio.file.Path</span>
 <span class="keyword">import</span> <span class="include">java.nio.file.Paths</span>
@@ -1051,7 +1051,7 @@ Part 2 of hello, world
 </div>
 </div>
 <div class="listingblock">
-<div class="title"><a href="groovy/file-write-temp.groovy">file-write-temp.groovy</a></div>
+<div class="title"><a href="src/main/groovy/file-write-temp.groovy">file-write-temp.groovy</a></div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">java.nio.file.Files</span>
 <span class="keyword">import</span> <span class="include">java.nio.file.Path</span>
@@ -1066,7 +1066,7 @@ println <span class="string"><span class="delimiter">&quot;</span><span class="c
 </div>
 </div>
 <div class="listingblock">
-<div class="title"><a href="groovy/file-write-append.groovy">file-write-append.groovy</a></div>
+<div class="title"><a href="src/main/groovy/file-write-append.groovy">file-write-append.groovy</a></div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">java.nio.file.Path</span>
 <span class="keyword">import</span> <span class="include">java.nio.file.Paths</span>
@@ -1089,7 +1089,7 @@ println f.text</code></pre>
 </div>
 </div>
 <div class="listingblock">
-<div class="title"><a href="groovy/file-write-writer.groovy">file-write-writer.groovy</a></div>
+<div class="title"><a href="src/main/groovy/file-write-writer.groovy">file-write-writer.groovy</a></div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">java.nio.file.Path</span>
 <span class="keyword">import</span> <span class="include">java.nio.file.Paths</span>
@@ -1115,7 +1115,7 @@ print f.text</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version 0.1-DRAFT<br>
-Last updated 2015-10-17 11:35:28 +10:00
+Last updated 2015-10-17 11:45:14 +10:00
 </div>
 </div>
 </body>
