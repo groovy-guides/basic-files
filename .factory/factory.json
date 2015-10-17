@@ -47,7 +47,10 @@
   },
   "workspace": {
     "location": "acceptor",
-    "type": "temp"
+    "type": "temp",
+    "resources": {
+        "runnerTimeout": "3600"
+    }
   },
   "source": {
     "project": {
@@ -59,8 +62,7 @@
     },
     "runners": {
       "/docker/groovy-runner": {
-        "location": "https://raw.githubusercontent.com/groovy-tutorial/admin-builders/master/Codenvy/factories/groovy-runner/Dockerfile",
-        "parameters": {}
+        "location": "https://raw.githubusercontent.com/groovy-tutorial/codenvy-factory/master/.factory/Dockerfile"
       }
     }
   },
