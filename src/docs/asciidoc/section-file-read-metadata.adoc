@@ -1,0 +1,10 @@
+=== File metadata
+:sourcedir: ../../main/groovy
+:source-highlighter: coderay
+:source-language: groovy
+
+[source]
+.link:src/main/groovy/file-read-metadata.groovy[file-read-metadata.groovy]
+----
+include::{sourcedir}/file-read-metadata.groovy[]
+----

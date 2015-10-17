@@ -8,7 +8,6 @@ defaultTasks 'syncPublishFiles'
 asciidoctor {
     logDocuments = true
     separateOutputDirs = false
-
 }
 
 task syncPublishFiles(type: Sync, dependsOn: [asciidoctor]) {
@@ -19,8 +18,7 @@ task syncPublishFiles(type: Sync, dependsOn: [asciidoctor]) {
 
     into "$buildDir/publish-site"
 
-    from "${asciidoctor.outputDir}/tutorial.html"
-    from "src/docs/html"
+    from "${asciidoctor.outputDir}/"
 
     from(projectDir) {
         includes = ['build.gradle',

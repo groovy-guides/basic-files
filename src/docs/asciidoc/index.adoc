@@ -99,43 +99,23 @@ An _absolute path_ is the canonical location of a file or directory and will con
 
 A _relative path_ represents the location of a file/directory from (relative to) another file/directory.
 
-== The pratcical stuff
+== The practical stuff
 
 Right, that's enough thoery - let's get to work!
 
-== Directories
-
-[source]
-.link:groovy/directory-list.groovy[directory-list.groovy]
-----
-include::{sourcedir}/directory-list.groovy[]
-----
-<1> Blah
-<2> Blah 2
-<3>
-
-TIP: See also `Path.eachFileMatch` and `Path.eachFileRecurse` methods when you want to get specific files.
+include::section-directories.adoc[]
 
 == Files
-=== File information
 
-[source]
-.link:groovy/file-read-info.groovy[file-read-info.groovy]
-----
-include::{sourcedir}/file-read-info.groovy[]
-----
+include::section-file-read-info.adoc[]
 
-[source]
-.link:groovy/file-read-metadata.groovy[file-read-metadata.groovy]
-----
-include::{sourcedir}/file-read-metadata.groovy[]
-----
+include::section-file-read-metadata.adoc[]
 
 === Reading a file
 Groovy
 
 [source]
-.link:groovy/file-read-path.groovy[file-read-path.groovy]
+.link:src/main/groovy/file-read-path.groovy[file-read-path.groovy]
 ----
 include::{sourcedir}/file-read-path.groovy[]
 ----
@@ -146,7 +126,7 @@ include::{sourcedir}/file-read-path.groovy[]
 The `java.io.File` class is in heavy use across the Java-verse but http://www.oracle.com/technetwork/articles/javase/nio-139333.html[it's the old way of doing things]. The example below demonstrates `File` in action:
 
 [source]
-.link:groovy/file-read-file.groovy[file-read-file.groovy]
+.link:src/main/groovy/file-read-file.groovy[file-read-file.groovy]
 ----
 include::{sourcedir}/file-read-file.groovy[]
 ----
@@ -154,7 +134,7 @@ include::{sourcedir}/file-read-file.groovy[]
 Luckily, the `File` class has a `toPath()` method that you can use to switch to the `nio` path:
 
 [source]
-.link:groovy/file-path-bridge.groovy[file-path-bridge.groovy]
+.link:src/main/groovy/file-path-bridge.groovy[file-path-bridge.groovy]
 ----
 include::{sourcedir}/file-path-bridge.groovy[]
 ----
@@ -163,28 +143,28 @@ Walk the new `Path`!
 ====
 
 [source]
-.link:groovy/file-read-reader.groovy[file-read-reader.groovy]
+.link:src/main/groovy/file-read-reader.groovy[file-read-reader.groovy]
 ----
 include::{sourcedir}/file-read-reader.groovy[]
 ----
 
 ==== Read each line
 [source]
-.link:groovy/file-read-lines.groovy[file-read-lines.groovy]
+.link:src/main/groovy/file-read-lines.groovy[file-read-lines.groovy]
 ----
 include::{sourcedir}/file-read-lines.groovy[]
 ----
 
 [source]
-.link:groovy/file-read-filter.groovy[file-read-filter.groovy]
+.link:src/main/groovy/file-read-filter.groovy[file-read-filter.groovy]
 ----
 include::{sourcedir}/file-read-filter.groovy[]
 ----
 
 [source]
-.link:groovy/file-read-split.groovy[file-read-split.groovy]
+.link:src/main/groovy/file-read-split.groovy[file-read-split.groovy]
 ----
 include::{sourcedir}/file-read-split.groovy[]
 ----
 
-include::section_writing.adoc[]
+include::section-writing.adoc[]
