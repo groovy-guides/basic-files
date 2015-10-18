@@ -9,10 +9,10 @@ def shoppingList = [
 
 Path f = Paths.get('tmp/tmp-shoppinglist.txt')
 
-f.write 'My shopping list\n'
+f.write 'My shopping list\n' //<1>
 
 for (item in shoppingList) {
-    f << " - $item\n"
+    f << " - $item\n"  //<2>
 }
 
 println f.text

@@ -1,7 +1,7 @@
 = Introduction to directories and files in Groovy
 Duncan Dickinson <duncan@groovy-tutorial.org>
-v1.0-DRAFT, 2015-09-09
-:groovy-version: 2.4.4
+v1.0-DRAFT, 2015-10-19
+:groovy-version: 2.4.5
 :licence: Apache License, Version 2.0
 :licence-url: http://www.apache.org/licenses/LICENSE-2.0
 :src: https://github.com/groovy-tutorial/basic-files
@@ -28,13 +28,6 @@ This tutorial is aimed at introducing the topic of reading/writing files and it 
 It's likely that such code will not fare well when facing large files or environments requiring high-performance IO.
 ====
 
-=== Key libraries
-The following libraries will be utilised in this tutorial:
-
-* https://docs.oracle.com/javase/8/docs/api/java/nio/file/package-summary.html[Java's `java.nio.file`] provides the primary directory/file handling
-** http://docs.groovy-lang.org/latest/html/groovy-jdk/java/nio/file/Path.html[Groovy's extension to `java.nio.file.Path`] makes life easier
-* http://tika.apache.org/[Apache Tika] is used to extract metadata and plain text from files
-
 === Using this tutorial
 For details on running the tutorial on your own system, please refer to the http://www.groovy-tutorial.org/GettingStarted.html[Getting started guide]
 
@@ -43,7 +36,22 @@ Access the source code:
 * {src}/tree/gh-pages[Source code]
 * {src}/archive/gh-pages.zip[As a zip file]
 
-The code in this tutorial was prepared using Groovy version {groovy-version} and is licensed under {licence-url}[{licence}]
+The source code includes two command line scripts: `run` (for *nix) and `run.bat` (for Windows) - they are very basic helpers that let you run the tutorial scripts via Gradle. To use the `run` scripts just call `run <script>` where `<script>` is the name of the script minus the `.groovy` extension. For example, to run the `directory-list.groovy` script you just use:
+
+    ./run directory-list
+
+A Codenvy project has been setup for this tutorial to make trying it out even easier:  https://codenvy.com/f?id=v6jezb89qakr0um2
+
+TIP: The Codenvy project is easiest to use when running the tutorial code as Groovy scripts but you can also use the Gradle approach but this will cause some downloading to occur.
+
+The code in this tutorial was prepared using Groovy version {groovy-version} and is licensed under {licence-url}[{licence}].
+
+=== Key libraries
+The following libraries will be utilised in this tutorial:
+
+* https://docs.oracle.com/javase/8/docs/api/java/nio/file/package-summary.html[Java's `java.nio.file`] provides the primary directory/file handling
+** Groovy's extensions to http://docs.groovy-lang.org/latest/html/groovy-jdk/java/nio/file/Path.html[`java.nio.file.Path`] makes life easier
+* http://tika.apache.org/[Apache Tika] is used to extract metadata and plain text from files
 
 == Background
 Java originally shipped a library (`java.io`) for handling input and output from elements such as files, network resources and devices. A new library, called NIO (`java.nio`), was released in Java 1.4 and extended in Java 7. This later extension is usually referred to as NIO.2 but you'll find these classes in the `java.nio` packages.
@@ -288,15 +296,35 @@ include::{sourcedir}/file-write-temp.groovy[]
 TIP: A new temporary file is created each time `Files.createTempFile` is called. This means you don't need to worry about writing over an existing file but it also means that the directory holding the temporary files can get quite large. For programs needing a lot of temporary file storage it's worth looking at `Files.createTempDirectory`.
 
 === Appending to a file
+
+Sometimes you just want to add content (append) to a file.
+
 [source]
 .link:src/main/groovy/file-write-append.groovy[file-write-append.groovy]
 ----
 include::{sourcedir}/file-write-append.groovy[]
 ----
+<1> Use the `write` method to create some original content
+<2> The `<<` operator will append to the file
+
+The `<<` operator is backed by the `append` method that Groovy adds to the `Path` class. It's possible to call `f.append('some text')` but the operator approach, to my mind, is more readable.
 
 === Using a buffered writer
+
+Much as we saw with the `withReader` for easy use of a `BufferedReader`, Groovy provides `withWriter` for easy use of a `BufferedWriter`. This approach can be more efficient when writing out a large amount of content to a file. Groovy will flush and close the writer when the closure completes.
+
 [source]
 .link:src/main/groovy/file-write-writer.groovy[file-write-writer.groovy]
 ----
 include::{sourcedir}/file-write-writer.groovy[]
 ----
+
+Cases in which your code may be reading from one source (e.g. a database or your new Internet of Things gadget) and placing the output into a file are good candidates for `withWriter`.
+
+== Conclusion
+This tutorial has provided an introduction to working with directories and files. Naturally, there's a lot more functionality on offer in the Java libraries and it's worth reading both the javadoc for these libraries as well as the javadoc for the Groovy extensions. I plan some more specific tutorials regarding XML, JSON, YAML, CSV and Excel so check back into http://www.groovy-tutorial.org[www.groovy-tutorial.org] to see what's new.
+
+=== Further reading
+
+* https://docs.oracle.com/javase/tutorial/essential/io/[Java Tutorial on Basic I/O]
+* http://www.ibm.com/developerworks/java/tutorials/j-nio/j-nio.html[Getting started with new I/O (NIO)]

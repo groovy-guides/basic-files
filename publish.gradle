@@ -38,7 +38,7 @@ task syncPublishFiles(type: Sync, dependsOn: [asciidoctor]) {
     }
 }
 
-task publish(type: GradleBuild, dependsOn: [asciidoctor, check]) {
+task publish(type: GradleBuild, dependsOn: [syncPublishFiles]) {
     description 'Publishes to gh-pages'
     buildFile = 'publish.gradle'
     tasks = ['publishGhPages']
