@@ -1,4 +1,5 @@
-//If you want to run this file as a script you'll need to uncomment the next line:
+//If you want to run this file as a script or groovyConsole
+//you'll need to uncomment the next line:
 //@Grab('org.apache.tika:tika-core:1.10')
 
 import org.apache.tika.Tika
@@ -8,10 +9,10 @@ import java.nio.file.Paths
 import java.nio.file.Files
 import java.nio.file.attribute.BasicFileAttributes
 
-Path f = Paths.get('resources/hello.html')
-BasicFileAttributes attrs = Files.readAttributes(f, BasicFileAttributes)
+Path f = Paths.get('resources/hello.html') //<1>
+BasicFileAttributes attrs = Files.readAttributes(f, BasicFileAttributes) //<2>
 
-Tika tika = new Tika()
+Tika tika = new Tika() //<3>
 
 println """
 File name: ${f.fileName}
@@ -32,6 +33,3 @@ Created: ${attrs.creationTime()}
 Last modified: ${attrs.lastModifiedTime()}
 Last accessed: ${attrs.lastAccessTime()}
 """
-
-//
-//println "Content type: ${Files.probeContentType(f)}"

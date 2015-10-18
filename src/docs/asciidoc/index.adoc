@@ -1,6 +1,6 @@
 = Introduction to directories and files in Groovy
 Duncan Dickinson <duncan@groovy-tutorial.org>
-v0.1-DRAFT, 2015-09-09
+v1.0-DRAFT, 2015-09-09
 :groovy-version: 2.4.4
 :licence: Apache License, Version 2.0
 :licence-url: http://www.apache.org/licenses/LICENSE-2.0
@@ -99,50 +99,100 @@ An _absolute path_ is the canonical location of a file or directory and will con
 
 A _relative path_ represents the location of a file/directory from (relative to) another file/directory.
 
-== The practical stuff
-
 Right, that's enough thoery - let's get to work!
 
 == Directories
+
+Let's start by accessing a directory and determining the files contained within it. In order to do this we'll need:
+
+* `java.nio.file.Paths`: provides static methods for creating an instance of `java.nio.file.Path` based on one or more `String` parameters that, when concatenated, defines a valid path.
+** This path doesn't have to actually exist
+** `Paths` also works with a URL
+* `java.nio.file.Files`: consists of static methods for operating on files and directories.
+
+Let's take a look at a sample script for investigating a directory:
 
 [source]
 .link:src/main/groovy/directory-list.groovy[directory-list.groovy]
 ----
 include::{sourcedir}/directory-list.groovy[]
 ----
-<1> Blah
-<2> Blah 2
-<3>
+<1> The `Paths` class provides a static `get` method in order to create a `Path` instance. Note that `resources` is a relative path under the `src/main/groovy` directory so you need to run the script with `src/main/groovy` as your working directory.
+<2> The call to `Files.readAttributes` using the new path instance (`dir`) will give us a map of attributes for the path.
+<3> Groovy supplements the Java `Path` class with a very handy `eachFile` method - it will invoke (call) a closure for each child of the path - both files and subdirectories.
+
+[TIP]
+.Running the script
+====
+To run this script you need to change directory into `src/main/groovy` and the run:
+
+    groovy directory-list.groovy
+
+All of the scripts in this tutorial are run from `src/main/groovy` and you just need to change the file name of the script you want to run. If you're using the groovyConsole you should launch it from `src/main/groovy`.
+====
+
+You can probably see from the example script that you can really find out a lot about files and directories:
+
+* The `Path` methods provide information about the directory's name (`fileName`) and location (`toAbsolutePath`)
+** Don't forget that Groovy lets us access getters in a manner that makes the look like fields/properties - hence `dir.fileName` is really a call to `dir.getFileName()`.
+* The `Files` class allows you to create, move, delete, copy and find files and directories. In this example I used it to determine:
+** If the directory `exists`,
+** The access privileges (`isReadable`, `isWritable`, `isExecutable`), and
+** if it's a directory (`isDirectory`)
+* The `Files` class can also give us information about the path's attributes such as `creationTime`, `lastModifiedTime`, and `lastAccessTime`.
+
+By calling the `eachFile` method on `dir` I can print out a basic list of the directory's contents. This is a simple example but Groovy methods such as `Path.traverse` and Java's `File.walk` allow code to walk a directory structure.
 
 TIP: See also `Path.eachFileMatch` and `Path.eachFileRecurse` methods when you want to get specific files.
 
+Directory paths let us wander through the filesystem but file paths let us read, create, update and delete content.
 
-== Files
+== File information
 
-=== File information
+This next example will give us some basic information about the file in terms of its status as a filesystem object.
 
 [source]
 .link:src/main/groovy/file-read-info.groovy[file-read-info.groovy]
 ----
 include::{sourcedir}/file-read-info.groovy[]
 ----
+<1> Establish a `Path` instance
+<2> Read the file's attributes - much the same as we did in the previous directory example
+<3> The `Tika` class is a very useful access point for working with Tika's large set of capabilities.
+
+A lot of the code is quite similar to how the directory was investigated (file path information, access privileges, and attributes).
+
+The call to `tika.detect(f.toFile())` is doing two things:
+
+1. `f.toFile()` provides a representation of the `Path` instance (`f`) using the older `java.io.File` class.
+2. The resulting `java.io.File` instance is passed to `tika.detect` returns the media type of the file by opening the file and applying heuristics to determine the type. In the example of `hello.html` the media type is `text/html`.
+
+TIP: Whilst you could also use `println "Content type: ${Files.probeContentType(f)}` to determine the content type it really doesn't work well unless you have an implementation of the `FileTypeDetector` class. I just find the Tika approach easier.
 
 === File metadata
+Many file types contain metadata within the file data. This metadata provides a set of attributes pertaining to the file's content - items such as the author name, the title of a document and so on.
 
 [source]
 .link:src/main/groovy/file-read-metadata.groovy[file-read-metadata.groovy]
 ----
 include::{sourcedir}/file-read-metadata.groovy[]
 ----
+<1> Tika's `parse` method will parse the specified file (`resources/xfile.docx`) and load metadata into the `metadata` variable provided. `parse` returns an instance of `java.io.Reader` which Groovy extends with a very handy `getText` method - we'll use this in item 3.
+<2> The `metadata.names()` method returns an array of metadata field names that can then be used to obtain the value of each metadata field.
+<3> The `Reader` instance (`r`) returned from `parse` lets us access the file's content as plain text.
 
-=== Reading a file
-Groovy
+You'll notice that the script reads a `docx` file, usually produced by Microsoft Word. This is what makes Tike extremely useful - it can read a wide variety of file types and return you the file's metadata and content. In the coming examples I'll read simple text files but many of these examples won't work on other types of files, including `docx`s.
+
+== Reading a file
+Groovy makes reading a text file so easy - just get an instance of the `Path` and call the `getText()` method as though it's a field (`text`):
 
 [source]
 .link:src/main/groovy/file-read-path.groovy[file-read-path.groovy]
 ----
 include::{sourcedir}/file-read-path.groovy[]
 ----
+
+This will just output the content of the text file in one go - be warned that this works OK for small files but is not the way to handle large files.
 
 [TIP]
 .The old path
@@ -166,18 +216,30 @@ include::{sourcedir}/file-path-bridge.groovy[]
 Walk the new `Path`!
 ====
 
+=== Using a buffered reader
+Groovy provides the `Path` class with a `withReader` method which uses a `java.io.BufferedReader` to read the file - making it a more efficient approach to reading text-based files. A closure is passed to `withReader` and the `BufferedReader` is fed into the closure - the `it` parameter in the example below.
+
 [source]
 .link:src/main/groovy/file-read-reader.groovy[file-read-reader.groovy]
 ----
 include::{sourcedir}/file-read-reader.groovy[]
 ----
+<1> This uses `BufferedReader`'s `lines` method to read a line at a time.
 
-==== Read each line
+Once the closure is finished, Groovy closes the `BufferedReader`.
+
+=== Read each line
+
+Groovy gives the `Path` class an `eachLine` method, allowing you to call a closure on each line in the text file:
+
 [source]
 .link:src/main/groovy/file-read-lines.groovy[file-read-lines.groovy]
 ----
 include::{sourcedir}/file-read-lines.groovy[]
 ----
+
+=== Filter a file
+Groovy gives the `Path` class an `filterLine` method that accepts a closure as a parameter and returns the lines that are not filtered out. The closure body performs the filter and returns `true` to keep the line or `false` to ignore it. In the example below all empty lines are stripped out of the text:
 
 [source]
 .link:src/main/groovy/file-read-filter.groovy[file-read-filter.groovy]
@@ -185,19 +247,37 @@ include::{sourcedir}/file-read-lines.groovy[]
 include::{sourcedir}/file-read-filter.groovy[]
 ----
 
+=== Split a file
+
+Another handy Groovy addition to `Path` is the `splitEachLine` method. The usage below passes in a regular expression (`/,/`) to split the line into fields separated by a comma. Each section returned by this split is loaded into an array that is passed into the closure that forms the second parameter for `splitEachLine`. This closure can then respond to the fields found in each line.
+
 [source]
 .link:src/main/groovy/file-read-split.groovy[file-read-split.groovy]
 ----
 include::{sourcedir}/file-read-split.groovy[]
 ----
 
-=== Writing a file
+TIP: This is just an example of reading a comma-separated (csv) file and a quick web search will locate you one of the many libraries available for correctly handling delimited files such as csv.
+
+== Writing a file
+
+Writing text to a file is extremely easy. As usual, you get a `Path` instance and then call one of a variety of methods. The example below demonstrates two approaches:
 
 [source]
 .link:src/main/groovy/file-write-basic.groovy[file-write-basic.groovy]
 ----
 include::{sourcedir}/file-write-basic.groovy[]
 ----
+<1> Groovy adds a `write` method to the `Path` class
+<2> Groovy also adds a `setText()` method so that you can set the file's contents as if it was a field.
+
+In both of the examples above if the file doesn't exist then it is created with the text provided. If the file does exist then its content is replaced by the `write` and `setText` methods.
+
+=== Writing a temporary file
+
+It's often handy to write to a temporary file for use as intermediate storage. Most operating systems have a location for storing temporary files and it is usually assumed that you only need the file for a limited time period - i.e. don't use them for long-term storage.
+
+In the example below the call to `Files.createTempFile` creates a new temporary file and then writes to it.
 
 [source]
 .link:src/main/groovy/file-write-temp.groovy[file-write-temp.groovy]
@@ -205,12 +285,16 @@ include::{sourcedir}/file-write-basic.groovy[]
 include::{sourcedir}/file-write-temp.groovy[]
 ----
 
+TIP: A new temporary file is created each time `Files.createTempFile` is called. This means you don't need to worry about writing over an existing file but it also means that the directory holding the temporary files can get quite large. For programs needing a lot of temporary file storage it's worth looking at `Files.createTempDirectory`.
+
+=== Appending to a file
 [source]
 .link:src/main/groovy/file-write-append.groovy[file-write-append.groovy]
 ----
 include::{sourcedir}/file-write-append.groovy[]
 ----
 
+=== Using a buffered writer
 [source]
 .link:src/main/groovy/file-write-writer.groovy[file-write-writer.groovy]
 ----
