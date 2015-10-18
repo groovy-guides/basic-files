@@ -510,7 +510,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Duncan Dickinson</span><br>
 <span id="email" class="email"><a href="mailto:duncan@groovy-tutorial.org">duncan@groovy-tutorial.org</a></span><br>
-<span id="revnumber">version 0.1-DRAFT,</span>
+<span id="revnumber">version 1.0-DRAFT,</span>
 <span id="revdate">2015-09-09</span>
 </div>
 <div id="toc" class="toc">
@@ -518,8 +518,8 @@ table.CodeRay td.code>pre{padding:0}
 <ul class="sectlevel1">
 <li><a href="#_introduction">Introduction</a>
 <ul class="sectlevel2">
-<li><a href="#_key_libraries">Key libraries</a></li>
 <li><a href="#_using_this_tutorial">Using this tutorial</a></li>
+<li><a href="#_key_libraries">Key libraries</a></li>
 </ul>
 </li>
 <li><a href="#_background">Background</a>
@@ -527,14 +527,30 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_key_concepts">Key concepts</a></li>
 </ul>
 </li>
-<li><a href="#_the_practical_stuff">The practical stuff</a></li>
 <li><a href="#_directories">Directories</a></li>
-<li><a href="#_files">Files</a>
+<li><a href="#_file_information">File information</a>
 <ul class="sectlevel2">
-<li><a href="#_file_information">File information</a></li>
 <li><a href="#_file_metadata">File metadata</a></li>
-<li><a href="#_reading_a_file">Reading a file</a></li>
-<li><a href="#_writing_a_file">Writing a file</a></li>
+</ul>
+</li>
+<li><a href="#_reading_a_file">Reading a file</a>
+<ul class="sectlevel2">
+<li><a href="#_using_a_buffered_reader">Using a buffered reader</a></li>
+<li><a href="#_read_each_line">Read each line</a></li>
+<li><a href="#_filter_a_file">Filter a file</a></li>
+<li><a href="#_split_a_file">Split a file</a></li>
+</ul>
+</li>
+<li><a href="#_writing_a_file">Writing a file</a>
+<ul class="sectlevel2">
+<li><a href="#_writing_a_temporary_file">Writing a temporary file</a></li>
+<li><a href="#_appending_to_a_file">Appending to a file</a></li>
+<li><a href="#_using_a_buffered_writer">Using a buffered writer</a></li>
+</ul>
+</li>
+<li><a href="#_conclusion">Conclusion</a>
+<ul class="sectlevel2">
+<li><a href="#_further_reading">Further reading</a></li>
 </ul>
 </li>
 </ul>
@@ -575,29 +591,6 @@ table.CodeRay td.code>pre{padding:0}
 </table>
 </div>
 <div class="sect2">
-<h3 id="_key_libraries">Key libraries</h3>
-<div class="paragraph">
-<p>The following libraries will be utilised in this tutorial:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://docs.oracle.com/javase/8/docs/api/java/nio/file/package-summary.html">Java&#8217;s <code>java.nio.file</code></a> provides the primary directory/file handling</p>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="http://docs.groovy-lang.org/latest/html/groovy-jdk/java/nio/file/Path.html">Groovy&#8217;s extension to <code>java.nio.file.Path</code></a> makes life easier</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p><a href="http://tika.apache.org/">Apache Tika</a> is used to extract metadata and plain text from files</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
 <h3 id="_using_this_tutorial">Using this tutorial</h3>
 <div class="paragraph">
 <p>For details on running the tutorial on your own system, please refer to the <a href="http://www.groovy-tutorial.org/GettingStarted.html">Getting started guide</a></p>
@@ -616,7 +609,53 @@ table.CodeRay td.code>pre{padding:0}
 </ul>
 </div>
 <div class="paragraph">
-<p>The code in this tutorial was prepared using Groovy version 2.4.4 and is licensed under <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a></p>
+<p>The source code includes two command line scripts: <code>run</code> (for *nix) and <code>run.bat</code> (for Windows) - they are very basic helpers that let you run the tutorial scripts via Gradle. To use the <code>run</code> scripts just call <code>run &lt;script&gt;</code> where <code>&lt;script&gt;</code> is the name of the script minus the <code>.groovy</code> extension. For example, to run the <code>directory-list.groovy</code> script you just use:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>./run directory-list</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A Codenvy project has been setup for this tutorial to make trying it out even easier:  <a href="https://codenvy.com/f?id=v6jezb89qakr0um2" class="bare">https://codenvy.com/f?id=v6jezb89qakr0um2</a></p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+The Codenvy project is easiest to use when running the tutorial code as Groovy scripts but you can also use the Gradle approach but this will cause some downloading to occur.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The code in this tutorial was prepared using Groovy version 2.4.4 and is licensed under <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_key_libraries">Key libraries</h3>
+<div class="paragraph">
+<p>The following libraries will be utilised in this tutorial:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://docs.oracle.com/javase/8/docs/api/java/nio/file/package-summary.html">Java&#8217;s <code>java.nio.file</code></a> provides the primary directory/file handling</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Groovy&#8217;s extensions to <a href="http://docs.groovy-lang.org/latest/html/groovy-jdk/java/nio/file/Path.html"><code>java.nio.file.Path</code></a> makes life easier</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><a href="http://tika.apache.org/">Apache Tika</a> is used to extract metadata and plain text from files</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
@@ -744,21 +783,42 @@ table.CodeRay td.code>pre{padding:0}
 <div class="paragraph">
 <p>A <em>relative path</em> represents the location of a file/directory from (relative to) another file/directory.</p>
 </div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_the_practical_stuff">The practical stuff</h2>
-<div class="sectionbody">
 <div class="paragraph">
 <p>Right, that&#8217;s enough thoery - let&#8217;s get to work!</p>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="_directories">Directories</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>Let&#8217;s start by accessing a directory and determining the files contained within it. In order to do this we&#8217;ll need:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>java.nio.file.Paths</code>: provides static methods for creating an instance of <code>java.nio.file.Path</code> based on one or more <code>String</code> parameters that, when concatenated, defines a valid path.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>This path doesn&#8217;t have to actually exist</p>
+</li>
+<li>
+<p><code>Paths</code> also works with a URL</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>java.nio.file.Files</code>: consists of static methods for operating on files and directories.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s take a look at a sample script for investigating a directory:</p>
+</div>
 <div class="listingblock">
 <div class="title"><a href="src/main/groovy/directory-list.groovy">directory-list.groovy</a></div>
 <div class="content">
@@ -796,14 +856,79 @@ dir.eachFile {
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Blah</td>
+<td>The <code>Paths</code> class provides a static <code>get</code> method in order to create a <code>Path</code> instance. Note that <code>resources</code> is a relative path under the <code>src/main/groovy</code> directory so you need to run the script with <code>src/main/groovy</code> as your working directory.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Blah 2
-&lt;3&gt;</td>
+<td>The call to <code>Files.readAttributes</code> using the new path instance (<code>dir</code>) will give us a map of attributes for the path.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Groovy supplements the Java <code>Path</code> class with a very handy <code>eachFile</code> method - it will invoke (call) a closure for each child of the path - both files and subdirectories.</td>
 </tr>
 </table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="title">Running the script</div>
+<div class="paragraph">
+<p>To run this script you need to change directory into <code>src/main/groovy</code> and the run:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>groovy directory-list.groovy</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>All of the scripts in this tutorial are run from <code>src/main/groovy</code> and you just need to change the file name of the script you want to run. If you&#8217;re using the groovyConsole you should launch it from <code>src/main/groovy</code>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>You can probably see from the example script that you can really find out a lot about files and directories:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The <code>Path</code> methods provide information about the directory&#8217;s name (<code>fileName</code>) and location (<code>toAbsolutePath</code>)</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Don&#8217;t forget that Groovy lets us access getters in a manner that makes the look like fields/properties - hence <code>dir.fileName</code> is really a call to <code>dir.getFileName()</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>The <code>Files</code> class allows you to create, move, delete, copy and find files and directories. In this example I used it to determine:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>If the directory <code>exists</code>,</p>
+</li>
+<li>
+<p>The access privileges (<code>isReadable</code>, <code>isWritable</code>, <code>isExecutable</code>), and</p>
+</li>
+<li>
+<p>if it&#8217;s a directory (<code>isDirectory</code>)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>The <code>Files</code> class can also give us information about the path&#8217;s attributes such as <code>creationTime</code>, <code>lastModifiedTime</code>, and <code>lastAccessTime</code>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>By calling the <code>eachFile</code> method on <code>dir</code> I can print out a basic list of the directory&#8217;s contents. This is a simple example but Groovy methods such as <code>Path.traverse</code> and Java&#8217;s <code>File.walk</code> allow code to walk a directory structure.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -817,17 +942,22 @@ See also <code>Path.eachFileMatch</code> and <code>Path.eachFileRecurse</code> m
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>Directory paths let us wander through the filesystem but file paths let us read, create, update and delete content.</p>
+</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_files">Files</h2>
+<h2 id="_file_information">File information</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="_file_information">File information</h3>
+<div class="paragraph">
+<p>This next example will give us some basic information about the file in terms of its status as a filesystem object.</p>
+</div>
 <div class="listingblock">
 <div class="title"><a href="src/main/groovy/file-read-info.groovy">file-read-info.groovy</a></div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">//If you want to run this file as a script you'll need to uncomment the next line:</span>
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">//If you want to run this file as a script or groovyConsole</span>
+<span class="comment">//you'll need to uncomment the next line:</span>
 <span class="comment">//@Grab('org.apache.tika:tika-core:1.10')</span>
 
 <span class="keyword">import</span> <span class="include">org.apache.tika.Tika</span>
@@ -837,10 +967,10 @@ See also <code>Path.eachFileMatch</code> and <code>Path.eachFileRecurse</code> m
 <span class="keyword">import</span> <span class="include">java.nio.file.Files</span>
 <span class="keyword">import</span> <span class="include">java.nio.file.attribute.BasicFileAttributes</span>
 
-Path f = Paths.get(<span class="string"><span class="delimiter">'</span><span class="content">resources/hello.html</span><span class="delimiter">'</span></span>)
-BasicFileAttributes attrs = Files.readAttributes(f, BasicFileAttributes)
+Path f = Paths.get(<span class="string"><span class="delimiter">'</span><span class="content">resources/hello.html</span><span class="delimiter">'</span></span>) <i class="conum" data-value="1"></i><b>(1)</b>
+BasicFileAttributes attrs = Files.readAttributes(f, BasicFileAttributes) <i class="conum" data-value="2"></i><b>(2)</b>
 
-Tika tika = <span class="keyword">new</span> Tika()
+Tika tika = <span class="keyword">new</span> Tika() <i class="conum" data-value="3"></i><b>(3)</b>
 
 println <span class="string"><span class="delimiter">&quot;&quot;&quot;</span><span class="content">
 File name: </span><span class="inline"><span class="inline-delimiter">${</span>f.fileName<span class="inline-delimiter">}</span></span><span class="content">
@@ -860,22 +990,65 @@ Content type: </span><span class="inline"><span class="inline-delimiter">${</spa
 Created: </span><span class="inline"><span class="inline-delimiter">${</span>attrs.creationTime()<span class="inline-delimiter">}</span></span><span class="content">
 Last modified: </span><span class="inline"><span class="inline-delimiter">${</span>attrs.lastModifiedTime()<span class="inline-delimiter">}</span></span><span class="content">
 Last accessed: </span><span class="inline"><span class="inline-delimiter">${</span>attrs.lastAccessTime()<span class="inline-delimiter">}</span></span><span class="content">
-</span><span class="delimiter">&quot;&quot;&quot;</span></span>
-
-<span class="comment">//</span>
-<span class="comment">//println &quot;Content type: ${Files.probeContentType(f)}&quot;</span></code></pre>
+</span><span class="delimiter">&quot;&quot;&quot;</span></span></code></pre>
 </div>
 </div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Establish a <code>Path</code> instance</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Read the file&#8217;s attributes - much the same as we did in the previous directory example</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The <code>Tika</code> class is a very useful access point for working with Tika&#8217;s large set of capabilities.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>A lot of the code is quite similar to how the directory was investigated (file path information, access privileges, and attributes).</p>
+</div>
+<div class="paragraph">
+<p>The call to <code>tika.detect(f.toFile())</code> is doing two things:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><code>f.toFile()</code> provides a representation of the <code>Path</code> instance (<code>f</code>) using the older <code>java.io.File</code> class.</p>
+</li>
+<li>
+<p>The resulting <code>java.io.File</code> instance is passed to <code>tika.detect</code> returns the media type of the file by opening the file and applying heuristics to determine the type. In the example of <code>hello.html</code> the media type is <code>text/html</code>.</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Whilst you could also use <code>println "Content type: ${Files.probeContentType(f)}</code> to determine the content type it really doesn&#8217;t work well unless you have an implementation of the <code>FileTypeDetector</code> class. I just find the Tika approach easier.
+</td>
+</tr>
+</table>
 </div>
 <div class="sect2">
 <h3 id="_file_metadata">File metadata</h3>
+<div class="paragraph">
+<p>Many file types contain metadata within the file data. This metadata provides a set of attributes pertaining to the file&#8217;s content - items such as the author name, the title of a document and so on.</p>
+</div>
 <div class="listingblock">
 <div class="title"><a href="src/main/groovy/file-read-metadata.groovy">file-read-metadata.groovy</a></div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">/*
- * @Grab('org.apache.tika:tika-core:1.10')
- * @Grab('org.apache.tika:tika-parsers:1.10')
- */</span>
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="comment">//If you want to run this file as a script or groovyConsole</span>
+<span class="comment">//you'll need to uncomment the next two lines:</span>
+<span class="comment">// @Grab('org.apache.tika:tika-core:1.10')</span>
+<span class="comment">// @Grab('org.apache.tika:tika-parsers:1.10')</span>
 
 <span class="keyword">import</span> <span class="include">org.apache.tika.Tika</span>
 <span class="keyword">import</span> <span class="include">org.apache.tika.metadata.Metadata</span>
@@ -889,17 +1062,19 @@ Tika tika = <span class="keyword">new</span> Tika()
 
 Metadata metadata = <span class="keyword">new</span> Metadata()
 
-<span class="predefined-type">Reader</span> r = tika.parse(f.newInputStream(), metadata)
+<span class="predefined-type">Reader</span> r = tika.parse(f.newInputStream(), metadata) <i class="conum" data-value="1"></i><b>(1)</b>
 
 print <span class="string"><span class="delimiter">'''</span><span class="content">
 File metadata:
 --------------------
 </span><span class="delimiter">'''</span></span>
 
+<i class="conum" data-value="2"></i><b>(2)</b>
 <span class="keyword">for</span> (name <span class="keyword">in</span> metadata.names()) {
     println <span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">$</span>name</span><span class="content">: </span><span class="inline"><span class="inline-delimiter">${</span>metadata.get(name)<span class="inline-delimiter">}</span></span><span class="delimiter">&quot;</span></span>
 }
 
+<i class="conum" data-value="3"></i><b>(3)</b>
 print <span class="string"><span class="delimiter">&quot;&quot;&quot;</span><span class="content">
 Plain text content:
 --------------------
@@ -907,11 +1082,33 @@ Plain text content:
 </span><span class="delimiter">&quot;&quot;&quot;</span></span></code></pre>
 </div>
 </div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Tika&#8217;s <code>parse</code> method will parse the specified file (<code>resources/xfile.docx</code>) and load metadata into the <code>metadata</code> variable provided. <code>parse</code> returns an instance of <code>java.io.Reader</code> which Groovy extends with a very handy <code>getText</code> method - we&#8217;ll use this in item 3.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The <code>metadata.names()</code> method returns an array of metadata field names that can then be used to obtain the value of each metadata field.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>The <code>Reader</code> instance (<code>r</code>) returned from <code>parse</code> lets us access the file&#8217;s content as plain text.</td>
+</tr>
+</table>
 </div>
-<div class="sect2">
-<h3 id="_reading_a_file">Reading a file</h3>
 <div class="paragraph">
-<p>Groovy</p>
+<p>You&#8217;ll notice that the script reads a <code>docx</code> file, usually produced by Microsoft Word. This is what makes Tike extremely useful - it can read a wide variety of file types and return you the file&#8217;s metadata and content. In the coming examples I&#8217;ll read simple text files but many of these examples won&#8217;t work on other types of files, including `docx`s.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_reading_a_file">Reading a file</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Groovy makes reading a text file so easy - just get an instance of the <code>Path</code> and call the <code>getText()</code> method as though it&#8217;s a field (<code>text</code>):</p>
 </div>
 <div class="listingblock">
 <div class="title"><a href="src/main/groovy/file-read-path.groovy">file-read-path.groovy</a></div>
@@ -922,6 +1119,9 @@ Plain text content:
 Path f = Paths.get(<span class="string"><span class="delimiter">'</span><span class="content">resources/logic.txt</span><span class="delimiter">'</span></span>)
 println f.text</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>This will just output the content of the text file in one go - be warned that this works OK for small files but is not the way to handle large files.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -961,6 +1161,11 @@ println p.text</code></pre>
 </tr>
 </table>
 </div>
+<div class="sect2">
+<h3 id="_using_a_buffered_reader">Using a buffered reader</h3>
+<div class="paragraph">
+<p>Groovy provides the <code>Path</code> class with a <code>withReader</code> method which uses a <code>java.io.BufferedReader</code> to read the file - making it a more efficient approach to reading text-based files. A closure is passed to <code>withReader</code> and the <code>BufferedReader</code> is fed into the closure - the <code>it</code> parameter in the example below.</p>
+</div>
 <div class="listingblock">
 <div class="title"><a href="src/main/groovy/file-read-reader.groovy">file-read-reader.groovy</a></div>
 <div class="content">
@@ -970,14 +1175,29 @@ println p.text</code></pre>
 Path f = Paths.get(<span class="string"><span class="delimiter">'</span><span class="content">resources/upload.csv</span><span class="delimiter">'</span></span>)
 
 f.withReader {
-    <span class="keyword">for</span> (line <span class="keyword">in</span> <span class="local-variable">it</span>.lines()) {
+    <span class="keyword">for</span> (line <span class="keyword">in</span> <span class="local-variable">it</span>.lines()) { <i class="conum" data-value="1"></i><b>(1)</b>
         println line
     }
 }</code></pre>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_read_each_line">Read each line</h4>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This uses <code>BufferedReader&#8217;s `lines</code> method to read a line at a time.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Once the closure is finished, Groovy closes the <code>BufferedReader</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_read_each_line">Read each line</h3>
+<div class="paragraph">
+<p>Groovy gives the <code>Path</code> class an <code>eachLine</code> method, allowing you to call a closure on each line in the text file:</p>
+</div>
 <div class="listingblock">
 <div class="title"><a href="src/main/groovy/file-read-lines.groovy">file-read-lines.groovy</a></div>
 <div class="content">
@@ -999,6 +1219,12 @@ lines.reverse().each {
 }</code></pre>
 </div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_filter_a_file">Filter a file</h3>
+<div class="paragraph">
+<p>Groovy gives the <code>Path</code> class an <code>filterLine</code> method that accepts a closure as a parameter and returns the lines that are not filtered out. The closure body performs the filter and returns <code>true</code> to keep the line or <code>false</code> to ignore it. In the example below all empty lines are stripped out of the text:</p>
+</div>
 <div class="listingblock">
 <div class="title"><a href="src/main/groovy/file-read-filter.groovy">file-read-filter.groovy</a></div>
 <div class="content">
@@ -1014,6 +1240,12 @@ Path f = Paths.get(<span class="string"><span class="delimiter">'</span><span cl
 println output</code></pre>
 </div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_split_a_file">Split a file</h3>
+<div class="paragraph">
+<p>Another handy Groovy addition to <code>Path</code> is the <code>splitEachLine</code> method. The usage below passes in a regular expression (<code>/,/</code>) to split the line into fields separated by a comma. Each section returned by this split is loaded into an array that is passed into the closure that forms the second parameter for <code>splitEachLine</code>. This closure can then respond to the fields found in each line.</p>
+</div>
 <div class="listingblock">
 <div class="title"><a href="src/main/groovy/file-read-split.groovy">file-read-split.groovy</a></div>
 <div class="content">
@@ -1027,10 +1259,27 @@ f.splitEachLine (<span class="regexp"><span class="delimiter">/</span><span clas
 }</code></pre>
 </div>
 </div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+This is just an example of reading a comma-separated (csv) file and a quick web search will locate you one of the many libraries available for correctly handling delimited files such as csv.
+</td>
+</tr>
+</table>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_writing_a_file">Writing a file</h3>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_writing_a_file">Writing a file</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Writing text to a file is extremely easy. As usual, you get a <code>Path</code> instance and then call one of a variety of methods. The example below demonstrates two approaches:</p>
+</div>
 <div class="listingblock">
 <div class="title"><a href="src/main/groovy/file-write-basic.groovy">file-write-basic.groovy</a></div>
 <div class="content">
@@ -1039,16 +1288,41 @@ f.splitEachLine (<span class="regexp"><span class="delimiter">/</span><span clas
 
 Path f1 = Paths.get(<span class="string"><span class="delimiter">'</span><span class="content">tmp/tmp-write1.txt</span><span class="delimiter">'</span></span>)
 
+<i class="conum" data-value="1"></i><b>(1)</b>
 f1.write <span class="string"><span class="delimiter">'''</span><span class="content">
 hello, world
 </span><span class="delimiter">'''</span></span>
 
 Path f2 = Paths.get(<span class="string"><span class="delimiter">'</span><span class="content">tmp/tmp-write2.txt</span><span class="delimiter">'</span></span>)
 
+<i class="conum" data-value="2"></i><b>(2)</b>
 f2.text = <span class="string"><span class="delimiter">'''</span><span class="content">
 Part 2 of hello, world
 </span><span class="delimiter">'''</span></span></code></pre>
 </div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Groovy adds a <code>write</code> method to the <code>Path</code> class</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Groovy also adds a <code>setText()</code> method so that you can set the file&#8217;s contents as if it was a field.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In both of the examples above if the file doesn&#8217;t exist then it is created with the text provided. If the file does exist then its content is replaced by the <code>write</code> and <code>setText</code> methods.</p>
+</div>
+<div class="sect2">
+<h3 id="_writing_a_temporary_file">Writing a temporary file</h3>
+<div class="paragraph">
+<p>It&#8217;s often handy to write to a temporary file for use as intermediate storage. Most operating systems have a location for storing temporary files and it is usually assumed that you only need the file for a limited time period - i.e. don&#8217;t use them for long-term storage.</p>
+</div>
+<div class="paragraph">
+<p>In the example below the call to <code>Files.createTempFile</code> creates a new temporary file and then writes to it.</p>
 </div>
 <div class="listingblock">
 <div class="title"><a href="src/main/groovy/file-write-temp.groovy">file-write-temp.groovy</a></div>
@@ -1065,6 +1339,24 @@ hello, world
 println <span class="string"><span class="delimiter">&quot;</span><span class="content">Temp file saved to: </span><span class="inline"><span class="inline-delimiter">$</span>f</span><span class="delimiter">&quot;</span></span></code></pre>
 </div>
 </div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+A new temporary file is created each time <code>Files.createTempFile</code> is called. This means you don&#8217;t need to worry about writing over an existing file but it also means that the directory holding the temporary files can get quite large. For programs needing a lot of temporary file storage it&#8217;s worth looking at <code>Files.createTempDirectory</code>.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_appending_to_a_file">Appending to a file</h3>
+<div class="paragraph">
+<p>Sometimes you just want to add content (append) to a file.</p>
+</div>
 <div class="listingblock">
 <div class="title"><a href="src/main/groovy/file-write-append.groovy">file-write-append.groovy</a></div>
 <div class="content">
@@ -1079,14 +1371,35 @@ println <span class="string"><span class="delimiter">&quot;</span><span class="c
 
 Path f = Paths.get(<span class="string"><span class="delimiter">'</span><span class="content">tmp/tmp-shoppinglist.txt</span><span class="delimiter">'</span></span>)
 
-f.write <span class="string"><span class="delimiter">'</span><span class="content">My shopping list\n</span><span class="delimiter">'</span></span>
+f.write <span class="string"><span class="delimiter">'</span><span class="content">My shopping list\n</span><span class="delimiter">'</span></span> <i class="conum" data-value="1"></i><b>(1)</b>
 
 <span class="keyword">for</span> (item <span class="keyword">in</span> shoppingList) {
-    f &lt;&lt; <span class="string"><span class="delimiter">&quot;</span><span class="content"> - </span><span class="inline"><span class="inline-delimiter">$</span>item</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>
+    f &lt;&lt; <span class="string"><span class="delimiter">&quot;</span><span class="content"> - </span><span class="inline"><span class="inline-delimiter">$</span>item</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>  <i class="conum" data-value="2"></i><b>(2)</b>
 }
 
 println f.text</code></pre>
 </div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Use the <code>write</code> method to create some original content</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The <code>&lt;&lt;</code> operator will append to the file</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The <code>&lt;&lt;</code> operator is backed by the <code>append</code> method that Groovy adds to the <code>Path</code> class. It&#8217;s possible to call <code>f.append('some text')</code> but the operator approach, to my mind, is more readable.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_using_a_buffered_writer">Using a buffered writer</h3>
+<div class="paragraph">
+<p>Much as we saw with the <code>withReader</code> for easy use of a <code>BufferedReader</code>, Groovy provides <code>withWriter</code> for easy use of a <code>BufferedWriter</code>. This approach can be more efficient when writing out a large amount of content to a file. Groovy will flush and close the writer when the closure completes.</p>
 </div>
 <div class="listingblock">
 <div class="title"><a href="src/main/groovy/file-write-writer.groovy">file-write-writer.groovy</a></div>
@@ -1108,14 +1421,38 @@ f.withWriter { writer -&gt;
 print f.text</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>Cases in which your code may be reading from one source (e.g. a database or your new Internet of Things gadget) and placing the output into a file are good candidates for <code>withWriter</code>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_conclusion">Conclusion</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This tutorial has provided an introduction to working with directories and files. Naturally, there&#8217;s a lot more functionality on offer in the Java libraries and it&#8217;s worth reading both the javadoc for these libraries as well as the javadoc for the Groovy extensions. I plan some more specific tutorials regarding XML, JSON, YAML, CSV and Excel so check back into <a href="http://www.groovy-tutorial.org">www.groovy-tutorial.org</a> to see what&#8217;s new.</p>
+</div>
+<div class="sect2">
+<h3 id="_further_reading">Further reading</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://docs.oracle.com/javase/tutorial/essential/io/">Java Tutorial on Basic I/O</a></p>
+</li>
+<li>
+<p><a href="http://www.ibm.com/developerworks/java/tutorials/j-nio/j-nio.html">Getting started with new I/O (NIO)</a></p>
+</li>
+</ul>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.1-DRAFT<br>
-Last updated 2015-10-17 13:25:59 +10:00
+Version 1.0-DRAFT<br>
+Last updated 2015-10-19 07:37:39 +10:00
 </div>
 </div>
 </body>

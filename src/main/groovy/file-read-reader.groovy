@@ -4,7 +4,7 @@ import java.nio.file.Paths
 Path f = Paths.get('resources/upload.csv')
 
 f.withReader {
-    for (line in it.lines()) {
+    for (line in it.lines()) { //<1>
         println line
     }
 }
